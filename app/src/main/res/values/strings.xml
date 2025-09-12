@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BubbleTea</string>
+    <string name="welcome_message">Welcome to BubbleTea!</string>
+    <string name="description">Your favorite bubble tea ordering app</string>
+</resources>

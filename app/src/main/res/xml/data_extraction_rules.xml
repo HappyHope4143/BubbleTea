@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- 
+             Optionally, specify data to be backed up here.
+             By default, all user data is backed up.
+        -->
+    </cloud-backup>
+</data-extraction-rules>
