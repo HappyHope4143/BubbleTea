@@ -43,6 +43,15 @@ jobs:
     - name: Clean build
       run: ./gradlew clean
 
+    - name: Code style check with ktlint
+      run: ./gradlew ktlintCheck
+
+    - name: Code quality check with detekt
+      run: ./gradlew detekt
+
+    - name: Code formatting check with spotless
+      run: ./gradlew spotlessCheck
+
     - name: Build debug APK
       run: ./gradlew assembleDebug
 
@@ -63,6 +72,16 @@ jobs:
         path: |
           app/build/reports/
           app/build/outputs/apk/
+
+    - name: Upload code quality reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: code-quality-reports
+        path: |
+          app/build/reports/ktlint/
+          app/build/reports/detekt/
+          app/build/reports/spotless/
 
     - name: Upload APK
       uses: actions/upload-artifact@v4

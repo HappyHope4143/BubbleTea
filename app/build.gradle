@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'io.gitlab.arturbosch.detekt'
+    id 'com.diffplug.spotless'
+    id 'org.jlleitschuh.gradle.ktlint' version '12.1.0'
 }
 
 android {
@@ -55,12 +58,91 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
-    
+
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation platform('androidx.compose:compose-bom:2024.02.00')
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4"
+}
+
+// Ktlint configuration
+ktlint {
+    version = "1.0.1"
+    android = true
+    ignoreFailures = false
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
+    }
+    filter {
+        exclude("**/build/**")
+    }
+}
+
+// Detekt configuration
+detekt {
+    toolVersion = "1.23.4"
+    config.setFrom(file("../detekt.yml"))
+    buildUponDefaultConfig = true
+    allRules = false
+
+    reports {
+        html.required = true
+        xml.required = true
+        txt.required = true
+        sarif.required = true
+    }
+}
+
+// Spotless configuration
+spotless {
+    kotlin {
+        target '**/*.kt'
+        ktlint().editorConfigOverride([
+            'ktlint_function_naming_ignore_when_annotated_with': 'Composable',
+            'indent_size': 'unset',
+            'continuation_indent_size': 'unset'
+        ])
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format 'misc', {
+        target '**/*.gradle', '**/*.md', '**/.gitignore'
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+}
+
+// Custom task to run all quality checks
+task codeQuality {
+    dependsOn 'ktlintCheck', 'detekt', 'spotlessCheck'
+    group = 'verification'
+    description = 'Run all code quality checks (ktlint, detekt, spotless)'
+}
+
+// Custom task to run all tests
+task allTests {
+    dependsOn 'test', 'testDebugUnitTest', 'testReleaseUnitTest'
+    group = 'verification'
+    description = 'Run all unit tests'
+}
+
+// Make build depend on code quality
+tasks.named('build') {
+    dependsOn 'codeQuality'
 }
