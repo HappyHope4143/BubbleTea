@@ -1,5 +1,17 @@
 <resources>
+    <!-- App Identity -->
     <string name="app_name">BubbleTea</string>
+    <string name="app_tagline">Bubble Tea Made Perfect</string>
+    
+    <!-- Welcome Screen -->
     <string name="welcome_message">Welcome to BubbleTea!</string>
-    <string name="description">Your favorite bubble tea ordering app</string>
+    <string name="description">Your favorite bubble tea ordering app with premium ingredients and authentic flavors</string>
+    
+    <!-- App Metadata -->
+    <string name="version_info">Version %1$s</string>
+    <string name="build_info">Build %1$s</string>
+    
+    <!-- Brand Messages -->
+    <string name="brand_promise">Authentic flavors, premium ingredients, delivered fresh</string>
+    <string name="quality_commitment">Made with real tea leaves and fresh tapioca pearls</string>
 </resources>
