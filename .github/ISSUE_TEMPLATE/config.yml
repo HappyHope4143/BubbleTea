@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📋 Development Roadmap
+    url: https://github.com/HappyHope4143/BubbleTea/blob/main/DEVELOPMENT_ROADMAP.md
+    about: 전체 개발 로드맵 및 이슈 관리 가이드를 확인하세요
+  - name: 📝 Project Status
+    url: https://github.com/HappyHope4143/BubbleTea/blob/main/PROJECT_STATUS.md  
+    about: 현재 프로젝트 상태 및 완료된 작업을 확인하세요
