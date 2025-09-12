@@ -1,6 +1,6 @@
 # BubbleTea Android Application
 
-BubbleTea is an Android application for ordering bubble tea drinks. Built using Kotlin with modern Android development practices, Material Design 3 theming, and targeting Android API 24+ (Android 7.0) devices.
+BubbleTea is an Android application for ordering bubble tea drinks. Built using Kotlin with modern Android development practices, Jetpack Compose UI framework, Material Design 3 theming, and targeting Android API 24+ (Android 7.0) devices.
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
@@ -29,14 +29,14 @@ Always reference these instructions first and fallback to search or bash command
    ./gradlew assembleDebug
    ```
    - Takes approximately 6-10 seconds after clean. NEVER CANCEL. Set timeout to 120+ seconds.
-   - Produces: `app/build/outputs/apk/debug/app-debug.apk` (~5.5MB)
+   - Produces: `app/build/outputs/apk/debug/app-debug.apk` (~8.3MB)
 
 4. **Release Build**:
    ```bash
    ./gradlew assembleRelease
    ```
    - Takes approximately 45-60 seconds after clean (includes lint vital analysis). NEVER CANCEL. Set timeout to 120+ seconds.
-   - Produces: `app/build/outputs/apk/release/app-release-unsigned.apk` (~4.5MB)
+   - Produces: `app/build/outputs/apk/release/app-release-unsigned.apk` (~5.6MB)
 
 5. **Install on Connected Device**:
    ```bash
@@ -87,8 +87,8 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools
 ### 2. Test Basic App Functionality
 Since there's no emulator available for UI testing, validate that:
 - APK files are generated successfully in `app/build/outputs/apk/`
-- Debug APK size is approximately 5.5MB
-- Release APK size is approximately 4.5MB
+- Debug APK size is approximately 8.3MB
+- Release APK size is approximately 5.6MB
 - No build errors or failures occur
 
 ### 3. Lint and Code Quality
@@ -99,14 +99,15 @@ Since there's no emulator available for UI testing, validate that:
 - Address any ERROR-level lint findings before committing
 
 ### 4. App Content Validation
-The app contains a simple welcome screen with:
+The app contains a Jetpack Compose-based welcome screen with:
 - Welcome message: "Welcome to BubbleTea!"
 - Description: "Your favorite bubble tea ordering app"
 - Material Design 3 theming with day/night mode support
 - Launcher icons for all screen densities
 
 When modifying UI components, verify changes by examining:
-- `app/src/main/res/layout/activity_main.xml` for layout changes
+- `app/src/main/java/com/happyhope/bubbletea/MainActivity.kt` for Compose UI logic
+- `app/src/main/java/com/happyhope/bubbletea/ui/theme/` for theme definitions
 - `app/src/main/res/values/strings.xml` for text content
 - `app/src/main/java/com/happyhope/bubbletea/MainActivity.kt` for logic changes
 
@@ -115,12 +116,16 @@ When modifying UI components, verify changes by examining:
 ### Project Structure
 ```
 BubbleTea/
+├── .github/workflows/         # CI/CD pipelines
 ├── app/
 │   ├── src/main/
 │   │   ├── java/com/happyhope/bubbletea/
-│   │   │   └── MainActivity.kt
+│   │   │   ├── MainActivity.kt
+│   │   │   └── ui/theme/       # Jetpack Compose theme files
+│   │   │       ├── Color.kt
+│   │   │       ├── Theme.kt
+│   │   │       └── Type.kt
 │   │   ├── res/
-│   │   │   ├── layout/activity_main.xml
 │   │   │   ├── values/strings.xml
 │   │   │   ├── values/themes.xml
 │   │   │   └── mipmap-*dpi/ic_launcher.png
@@ -131,7 +136,8 @@ BubbleTea/
 ├── build.gradle
 ├── settings.gradle
 ├── gradlew / gradlew.bat
-└── verify_project.sh
+├── verify_project.sh
+└── build_verification.sh
 ```
 
 ### Key Technical Specifications
@@ -149,6 +155,8 @@ BubbleTea/
 - AndroidX Core KTX 1.12.0
 - AppCompat 1.6.1  
 - Material Components 1.11.0
+- Jetpack Compose BOM 2024.02.00
+- Compose UI, Material3, and Activity Compose
 - ConstraintLayout 2.1.4
 - JUnit 4.13.2 (for future tests)
 - Espresso 3.5.1 (for future UI tests)
