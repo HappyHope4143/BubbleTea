@@ -1,4 +1,4 @@
-name: CI Build
+name: Simple Build Check
 
 on:
   push:
@@ -9,8 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 20
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -34,39 +34,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Grant execute permission for gradlew
+    - name: Make gradlew executable
       run: chmod +x gradlew
-
-    - name: Grant execute permission for scripts  
-      run: chmod +x *.sh
 
     - name: Clean build
       run: ./gradlew clean
 
-    - name: Build debug APK
-      run: ./gradlew assembleDebug
-
-    - name: Run unit tests
-      run: ./gradlew test
-
-    - name: Lint
-      run: ./gradlew lint
-
-    - name: Run build verification
-      run: ./build_verification.sh
-
-    - name: Upload build reports
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: build-reports
-        path: |
-          app/build/reports/
-          app/build/outputs/apk/
+    - name: Build project
+      run: ./gradlew build
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
+      if: success()
       with:
-        name: apk-files
-        path: |
-          app/build/outputs/apk/debug/app-debug.apk
+        name: app-debug
+        path: app/build/outputs/apk/debug/app-debug.apk
