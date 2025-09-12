@@ -35,7 +35,7 @@ Always reference these instructions first and fallback to search or bash command
    ```bash
    ./gradlew assembleRelease
    ```
-   - Takes approximately 9-15 seconds after clean. NEVER CANCEL. Set timeout to 120+ seconds.
+   - Takes approximately 45-60 seconds after clean (includes lint vital analysis). NEVER CANCEL. Set timeout to 120+ seconds.
    - Produces: `app/build/outputs/apk/release/app-release-unsigned.apk` (~4.5MB)
 
 5. **Install on Connected Device**:
@@ -52,14 +52,15 @@ Always reference these instructions first and fallback to search or bash command
 # OR specifically:
 ./gradlew testDebugUnitTest
 ```
-- Takes approximately 1-5 seconds (currently no actual test files exist). NEVER CANCEL. Set timeout to 60+ seconds.
+- `./gradlew test` takes approximately 30-40 seconds (includes compilation of all variants). NEVER CANCEL. Set timeout to 60+ seconds.
+- `./gradlew testDebugUnitTest` takes approximately 1-3 seconds (currently no test files exist). NEVER CANCEL. Set timeout to 60+ seconds.
 - Note: The project currently has NO unit test files. Tests pass because there are no tests to run.
 
 #### Lint Analysis
 ```bash
 ./gradlew lintDebug
 ```
-- Takes approximately 4-10 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
+- Takes approximately 10-20 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 - Generates reports in `app/build/reports/lint-results-debug.html`
 - Current lint findings: Minor warning about targetSdk 34 (can be ignored)
 
@@ -68,7 +69,7 @@ Always reference these instructions first and fallback to search or bash command
 ./gradlew check
 ```
 - Runs all available checks including lint and tests
-- Takes approximately 1-5 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
+- Takes approximately 30-45 seconds. NEVER CANCEL. Set timeout to 60+ seconds.
 
 ## Manual Validation Requirements
 
@@ -212,12 +213,15 @@ All timing based on Ubuntu Linux environment with Gradle daemon running:
 |------|-------------|-----------------|
 | `./gradlew clean` | 1-3 seconds | 60 seconds |
 | `./gradlew assembleDebug` | 6-10 seconds | 120 seconds |
-| `./gradlew assembleRelease` | 9-15 seconds | 120 seconds |
-| `./gradlew test` | 1-5 seconds | 60 seconds |
-| `./gradlew lintDebug` | 4-10 seconds | 60 seconds |
-| `./gradlew check` | 1-5 seconds | 60 seconds |
+| `./gradlew assembleRelease` | 45-60 seconds | 120 seconds |
+| `./gradlew test` | 30-40 seconds | 60 seconds |
+| `./gradlew testDebugUnitTest` | 1-3 seconds | 60 seconds |
+| `./gradlew lintDebug` | 10-20 seconds | 60 seconds |
+| `./gradlew check` | 30-45 seconds | 60 seconds |
 
 **CRITICAL**: NEVER CANCEL any build or test command before the timeout. First-time builds or builds after `./gradlew clean` may take longer than subsequent builds due to Gradle caching.
+
+**Note on Initial Setup**: The very first build after cloning or in a fresh environment will take significantly longer (60+ seconds for assembleDebug, 90+ seconds for assembleRelease) due to downloading dependencies and setting up build tools. The timings above apply after initial setup and dependency caching.
 
 ## Error Recovery
 
