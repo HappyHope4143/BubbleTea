@@ -10,10 +10,9 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - 광고 삽입 및 푸시 알림
 - 캐시 저장 및 오프라인 지원
 
-## 📚 생성된 GitHub 이슈 템플릿
+## 📚 생성할 GitHub 이슈 목록
 
 ### 1. 🏗️ [ARCHITECTURE] 프로젝트 아키텍처 설계
-**파일**: `.github/ISSUE_TEMPLATE/01-project-architecture.md`
 - 패키지 구조 설계 (data, domain, ui, di)
 - 각 레이어별 기본 클래스/인터페이스 생성
 - Clean Architecture 원칙 적용
@@ -21,7 +20,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 1-2주
 
 ### 2. 🔌 [DATA] 데이터 레이어 구현  
-**파일**: `.github/ISSUE_TEMPLATE/02-data-layer.md`
 - 외부 API 연동 (Retrofit/OkHttp)
 - Repository 패턴 구현
 - Room 데이터베이스 및 캐시 시스템
@@ -30,7 +28,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 2-3주
 
 ### 3. 🧠 [DOMAIN] 비즈니스 레이어 구현
-**파일**: `.github/ISSUE_TEMPLATE/03-business-layer.md`
 - UseCase 클래스 구현
 - 비즈니스 로직 및 데이터 검증
 - ViewModel 연결 및 상태 관리
@@ -39,7 +36,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 2-3주
 
 ### 4. 🎨 [UI] UI 레이어 구현
-**파일**: `.github/ISSUE_TEMPLATE/04-ui-layer.md`
 - 메인 화면 및 Fragment/Activity 구현
 - 사용자 인터랙션 처리
 - 테마/다크모드 지원
@@ -49,7 +45,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 3-4주
 
 ### 5. 🎨 [DESIGN] 앱 브랜딩
-**파일**: `.github/ISSUE_TEMPLATE/05-app-branding.md`
 - 앱 아이콘 디자인 및 적용
 - 스플래시 화면 구현
 - 브랜드 아이덴티티 구축
@@ -58,7 +53,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 1-2주
 
 ### 6. 🧪 [TEST] 테스트 코드 작성
-**파일**: `.github/ISSUE_TEMPLATE/06-testing.md`
 - 유닛 테스트, 통합 테스트, UI 테스트
 - 테스트 커버리지 확보 (80% 이상)
 - 테스트 자동화 설정
@@ -67,7 +61,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 2-3주
 
 ### 7. ⚙️ [CICD] CI/CD 환경 구축
-**파일**: `.github/ISSUE_TEMPLATE/07-cicd.md`
 - GitHub Actions 워크플로우 설정
 - 자동 빌드, 테스트, 배포
 - 코드 품질 검사 자동화
@@ -76,7 +69,6 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 - **예상 기간**: 1-2주
 
 ### 8. 🚀 [DEPLOY] Play Store 배포 준비
-**파일**: `.github/ISSUE_TEMPLATE/08-play-store-deployment.md`
 - Google Play Console 설정
 - 스토어 리스팅 최적화
 - 정책 준수 및 베타 테스트
@@ -113,9 +105,11 @@ BubbleTea는 실시간 IT/과학 헤드라인을 제공하는 트렌디한 안�
 ### 이슈 생성하기
 1. GitHub 저장소의 **Issues** 탭으로 이동
 2. **New Issue** 클릭
-3. 해당하는 이슈 템플릿 선택
-4. 템플릿의 체크리스트를 기반으로 작업 진행
+3. `CREATE_GITHUB_ISSUES.md` 파일을 참고하여 이슈 내용 복사
+4. 체크리스트를 기반으로 작업 진행
 5. 적절한 라벨과 마일스톤 설정
+
+> 📝 **참고**: `CREATE_GITHUB_ISSUES.md` 파일에 8개 이슈의 제목, 라벨, 상세 내용이 모두 정리되어 있습니다.
 
 ### 우선순위 라벨
 - `high priority`: 핵심 기능, 블로킹 이슈
