@@ -15,8 +15,9 @@
 - **README.md**: Complete documentation with build instructions
 
 ### 3. ✅ Basic App Structure
-- **MainActivity**: Created in Kotlin with AppCompatActivity
-- **App Theme**: Material Design with day/night theme support
+- **MainActivity**: Created in Kotlin with AppCompatActivity using Jetpack Compose
+- **Navigation**: Jetpack Compose Navigation setup with NavHost and navigation controller
+- **App Theme**: Material Design 3 with day/night theme support
 - **AndroidManifest.xml**: Properly configured with launch activity
 - **Resources**: Complete set of strings, colors, themes, and layout files
 - **Icons**: Launcher icons for all screen densities (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)
@@ -65,11 +66,14 @@ BubbleTea/
 
 1. **Complete Android Project Structure**: Standard Android project layout with all necessary files
 2. **Kotlin Support**: MainActivity implemented in Kotlin with modern Android development practices
-3. **Material Design**: Uses Material Components theme with proper color scheme
-4. **Responsive Layout**: ConstraintLayout for flexible UI design
-5. **Multi-density Icons**: Launcher icons for all screen densities
-6. **Build System**: Gradle build system with dependency management
-7. **GitHub Ready**: Complete with .gitignore, LICENSE, and README
+3. **Jetpack Compose**: Modern UI toolkit with declarative programming
+4. **Navigation System**: Jetpack Compose Navigation with NavHost for screen navigation
+5. **Material Design 3**: Uses Material Components theme with proper color scheme
+6. **Responsive Layout**: Modern Compose layouts for flexible UI design
+7. **Multi-density Icons**: Launcher icons for all screen densities
+8. **Build System**: Gradle build system with dependency management
+9. **GitHub Ready**: Complete with .gitignore, LICENSE, and README
+10. **Multilingual Documentation**: English and Korean documentation available
 
 ## 🚀 How to Use
 
@@ -107,12 +111,14 @@ Run the verification script to confirm all components are properly configured:
 ## 🔧 Technical Specifications
 
 - **Language**: Kotlin
-- **Build Tools**: Android Gradle Plugin 7.4.2
-- **Gradle**: 7.5
+- **UI Framework**: Jetpack Compose
+- **Navigation**: Jetpack Compose Navigation
+- **Build Tools**: Android Gradle Plugin 8.2.0
+- **Gradle**: 8.12
 - **Minimum SDK**: API 24 (Android 7.0)
-- **Target SDK**: API 32
-- **Theme**: Material Components
-- **Layout**: ConstraintLayout
+- **Target SDK**: API 34 (Android 14)
+- **Theme**: Material Design 3
+- **Layout**: Compose UI
 - **Package**: com.happyhope.bubbletea
 
 ## ✅ Project Status

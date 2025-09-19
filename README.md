@@ -2,6 +2,8 @@
 
 BubbleTea is an Android application for ordering your favorite bubble tea drinks.
 
+**[한국어 문서 (Korean Documentation)](README_KO.md)**
+
 ## Project Structure
 
 This is a standard Android project created with:

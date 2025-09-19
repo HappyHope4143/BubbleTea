@@ -18,6 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.happyhope.bubbletea.ui.theme.BubbleTeaTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,10 +32,25 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    WelcomeScreen()
+                    BubbleTeaApp()
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BubbleTeaApp() {
+    val navController = rememberNavController()
+    
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            WelcomeScreen()
+        }
+        // Additional screens can be added here
     }
 }
 
