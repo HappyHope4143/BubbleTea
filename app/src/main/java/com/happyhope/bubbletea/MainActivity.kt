@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,8 +23,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.happyhope.bubbletea.presentation.news.NewsScreen
 import com.happyhope.bubbletea.ui.theme.BubbleTeaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +53,22 @@ fun BubbleTeaApp() {
         startDestination = "home"
     ) {
         composable("home") {
-            WelcomeScreen()
+            WelcomeScreen(
+                onNavigateToNews = {
+                    navController.navigate("news")
+                }
+            )
         }
-        // Additional screens can be added here
+        composable("news") {
+            NewsScreen()
+        }
     }
 }
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    onNavigateToNews: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,6 +89,15 @@ fun WelcomeScreen() {
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(top = 16.dp)
         )
+        
+        Button(
+            onClick = onNavigateToNews,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp)
+        ) {
+            Text("View News")
+        }
     }
 }
 
