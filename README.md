@@ -32,6 +32,31 @@ This project follows a modern Android architecture with multi-module structure:
 - **Material Design 3**: Latest Material Design system with dynamic theming
 - **Dependency Injection**: Hilt for compile-time safety and performance
 - **Reactive Programming**: StateFlow and Compose state management
+- **Real-time News**: NewsAPI.org integration for IT/Science technology news
+- **Offline Support**: Room database caching for offline access
+- **Automatic Data Management**: Maintains latest 100 news articles automatically
+
+## NewsAPI Setup
+
+To receive real-time news in the app, you'll need a NewsAPI.org API key.
+
+### Setup Instructions
+
+1. Sign up for a free account at [NewsAPI.org](https://newsapi.org/register)
+2. Copy your API key
+3. Create `local.properties` file:
+
+```bash
+cp local.properties.template local.properties
+```
+
+4. Add your API key to `local.properties`:
+
+```properties
+newsapi.apiKey=YOUR_API_KEY_HERE
+```
+
+For detailed information, see [NEWS_API_INTEGRATION.md](NEWS_API_INTEGRATION.md).
 
 ## Building the Project
 
