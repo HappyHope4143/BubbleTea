@@ -27,5 +27,16 @@ data class NewsApiModel(
     val publishedAt: String?,
     
     @SerializedName("urlToImage")
-    val urlToImage: String?
+    val urlToImage: String?,
+    
+    @SerializedName("source")
+    val source: NewsSourceModel?
+)
+
+data class NewsSourceModel(
+    @SerializedName("id")
+    val id: String?,
+    
+    @SerializedName("name")
+    val name: String?
 )

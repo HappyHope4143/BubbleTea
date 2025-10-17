@@ -1,5 +1,6 @@
 package com.happyhope.bubbletea.presentation.news
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,6 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.happyhope.bubbletea.domain.model.News
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,6 +24,7 @@ fun NewsScreen(
     viewModel: NewsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(uiState.isRefreshing)
     
     Column(
         modifier = Modifier.fillMaxSize()
@@ -28,20 +32,6 @@ fun NewsScreen(
         TopAppBar(
             title = {
                 Text("News")
-            },
-            actions = {
-                if (uiState.isRefreshing) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    TextButton(
-                        onClick = { viewModel.handleEvent(NewsEvent.RefreshNews) }
-                    ) {
-                        Text("Refresh")
-                    }
-                }
             }
         )
         
@@ -79,25 +69,33 @@ fun NewsScreen(
             }
             
             else -> {
-                LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = { viewModel.handleEvent(NewsEvent.RefreshNews) }
                 ) {
-                    items(uiState.newsList) { news ->
-                        NewsItem(news = news)
-                    }
-                    
-                    if (uiState.newsList.isEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "No news available",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(32.dp)
-                                )
+                    LazyColumn(
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(uiState.newsList) { news ->
+                            NewsItem(
+                                news = news,
+                                onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news)) }
+                            )
+                        }
+                        
+                        if (uiState.newsList.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "No news available",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        modifier = Modifier.padding(32.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -125,12 +123,15 @@ fun NewsScreen(
 @Composable
 fun NewsItem(
     news: News,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val dateFormat = remember { SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()) }
     
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -163,14 +164,22 @@ fun NewsItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = dateFormat.format(Date(news.createdAt)),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Column {
+                    Text(
+                        text = news.source,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = dateFormat.format(Date(news.createdAt)),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
                 
                 TextButton(
-                    onClick = { /* Handle URL open */ }
+                    onClick = onClick
                 ) {
                     Text("Read More")
                 }

@@ -18,6 +18,9 @@ data class NewsEntity(
     @ColumnInfo(name = "url")
     val url: String,
     
+    @ColumnInfo(name = "source")
+    val source: String,
+    
     @ColumnInfo(name = "created_at")
     val createdAt: Long = System.currentTimeMillis()
 )
