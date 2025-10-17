@@ -1,5 +1,6 @@
 package com.happyhope.bubbletea.data.repository
 
+import com.happyhope.bubbletea.BuildConfig
 import com.happyhope.bubbletea.data.api.service.NewsApiService
 import com.happyhope.bubbletea.data.dao.NewsDao
 import com.happyhope.bubbletea.data.database.BubbleTeaDatabase
@@ -24,28 +25,27 @@ class NewsRepositoryImpl @Inject constructor(
     private val sampleNewsProvider: SampleNewsProvider
 ) : NewsRepository {
     
-    // This would typically come from BuildConfig or a configuration file
-    private val apiKey = "demo-api-key" // In real app, use secure storage
-    
     override suspend fun getNews(): Flow<List<News>> {
         return flow {
-            // First check local data
+            // First emit cached data if available
             val localNews = getLocalNews()
             if (localNews.isNotEmpty()) {
                 emit(localNews)
-            } else {
-                // If no local data, add sample data for demonstration
+            }
+            
+            // Then try to refresh from network
+            val refreshResult = refreshNews()
+            if (refreshResult.isSuccess) {
+                // Emit fresh data after successful refresh
+                val updatedNews = getLocalNews()
+                if (updatedNews.isNotEmpty()) {
+                    emit(updatedNews)
+                }
+            } else if (localNews.isEmpty()) {
+                // Only use sample data if no cached data and network failed
                 val sampleNews = sampleNewsProvider.getSampleNews()
                 newsDao.insertNews(sampleNews)
                 emit(mapper.mapEntitiesToDomain(sampleNews))
-            }
-            
-            // Try to refresh from network (will fail with demo API key)
-            try {
-                refreshNews()
-            } catch (e: Exception) {
-                // Continue with cached/sample data if network fails
-                // This is expected behavior for the demo
             }
         }.flowOn(Dispatchers.IO)
     }
@@ -53,28 +53,32 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun refreshNews(): Result<Unit> {
         return withContext(Dispatchers.IO) {
             try {
-                // This will likely fail with demo API key, but that's expected
-                val response = newsApiService.getNews(apiKey = apiKey)
-                val newsEntities = mapper.mapApiListToEntityList(response.articles)
+                // Try to fetch technology news (IT/Science related)
+                val response = newsApiService.getTopHeadlines(
+                    category = "technology",
+                    country = "us",
+                    pageSize = 20,
+                    apiKey = BuildConfig.NEWS_API_KEY
+                )
                 
-                if (newsEntities.isNotEmpty()) {
-                    newsDao.insertNews(newsEntities)
-                    clearOldNews()
-                    Result.success(Unit)
+                // Check if API returned valid data
+                if (response.status == "ok" && response.articles.isNotEmpty()) {
+                    val newsEntities = mapper.mapApiListToEntityList(response.articles)
+                    
+                    if (newsEntities.isNotEmpty()) {
+                        newsDao.insertNews(newsEntities)
+                        clearOldNews()
+                        Result.success(Unit)
+                    } else {
+                        Result.failure(Exception("No valid articles in response"))
+                    }
                 } else {
-                    // Fallback to sample data if API returns empty
-                    val sampleNews = sampleNewsProvider.getSampleNews()
-                    newsDao.insertNews(sampleNews)
-                    clearOldNews()
-                    Result.success(Unit)
+                    Result.failure(Exception("API returned error status or empty articles"))
                 }
             } catch (e: Exception) {
-                // If API fails, ensure we have sample data
-                val currentCount = newsDao.getNewsCount()
-                if (currentCount == 0) {
-                    val sampleNews = sampleNewsProvider.getSampleNews()
-                    newsDao.insertNews(sampleNews)
-                }
+                // Log error and return failure
+                // In production, you might want to use a proper logging framework
+                println("NewsAPI Error: ${e.message}")
                 Result.failure(e)
             }
         }
