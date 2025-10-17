@@ -18,6 +18,31 @@ BubbleTea는 좋아하는 버블티 음료를 주문할 수 있는 Android 애�
 - Material Design 3 테마 적용
 - 라이트 및 다크 테마 지원
 - 네비게이션 시스템 구성
+- **실시간 기술 뉴스**: NewsAPI.org 연동을 통한 테크놀로지 뉴스 제공
+- **오프라인 지원**: Room 데이터베이스 기반 뉴스 캐싱
+- **자동 데이터 관리**: 최신 100개 뉴스 자동 유지
+
+## NewsAPI 설정
+
+앱에서 실시간 뉴스를 받아보려면 NewsAPI.org API 키가 필요합니다.
+
+### 설정 방법
+
+1. [NewsAPI.org](https://newsapi.org/register)에서 무료 계정 생성
+2. API 키 복사
+3. `local.properties` 파일 생성:
+
+```bash
+cp local.properties.template local.properties
+```
+
+4. `local.properties`에 API 키 추가:
+
+```properties
+newsapi.apiKey=YOUR_API_KEY_HERE
+```
+
+자세한 내용은 [NEWS_API_INTEGRATION.md](NEWS_API_INTEGRATION.md)를 참조하세요.
 
 ## 프로젝트 빌드
 
