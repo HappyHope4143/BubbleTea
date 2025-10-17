@@ -2,4 +2,6 @@
     <string name="app_name">BubbleTea</string>
     <string name="welcome_message">Welcome to BubbleTea!</string>
     <string name="description">Your favorite bubble tea ordering app</string>
+    <string name="news_widget_description">Display latest news headlines</string>
+    <string name="news_widget_loading">Loading news…</string>
 </resources>
