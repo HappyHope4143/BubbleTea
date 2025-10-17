@@ -2,6 +2,7 @@ package com.happyhope.bubbletea.presentation.news
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.happyhope.bubbletea.domain.model.News
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,7 @@ class NewsViewModel @Inject constructor(
             is NewsEvent.LoadNews -> loadNews()
             is NewsEvent.RefreshNews -> refreshNews()
             is NewsEvent.RetryLoad -> loadNews()
+            is NewsEvent.NewsClicked -> handleNewsClick(event.news)
         }
     }
     
@@ -78,5 +80,10 @@ class NewsViewModel @Inject constructor(
                 }
             )
         }
+    }
+    
+    private fun handleNewsClick(news: News) {
+        // TODO: Handle opening news URL in browser or WebView
+        // For now, this is a placeholder for future implementation
     }
 }

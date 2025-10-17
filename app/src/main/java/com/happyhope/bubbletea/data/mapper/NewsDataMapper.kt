@@ -28,6 +28,7 @@ class NewsDataMapper @Inject constructor() {
             title = apiModel.title,
             summary = apiModel.description ?: "",
             url = apiModel.url,
+            source = apiModel.source?.name ?: "Unknown Source",
             createdAt = timestamp
         )
     }
@@ -38,6 +39,7 @@ class NewsDataMapper @Inject constructor() {
             title = entity.title,
             summary = entity.summary,
             url = entity.url,
+            source = entity.source,
             createdAt = entity.createdAt
         )
     }
