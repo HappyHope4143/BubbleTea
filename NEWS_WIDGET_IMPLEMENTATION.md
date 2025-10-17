@@ -79,6 +79,7 @@ implementation "androidx.glance:glance-material3:1.0.0"
 ## Configuration Files (설정 파일)
 
 ### 1. AndroidManifest.xml
+
 ```xml
 <receiver
     android:name=".widget.NewsWidgetReceiver"
@@ -161,10 +162,14 @@ Each news item shows:
 - 크기 조정 가능: 가로 및 세로
 
 ### Update Frequency (업데이트 빈도)
-- Automatic: Every 30 minutes (1800000ms)
+- Automatic: Every 30 minutes (1800000ms) - subject to Android system limits and battery optimization
 - Manual: User-triggered via refresh button
-- 자동: 30분마다 (1800000ms)
+- 자동: 30분마다 (1800000ms) - Android 시스템 제한 및 배터리 최적화에 따라 달라질 수 있음
 - 수동: 새로고침 버튼을 통한 사용자 트리거
+
+**Note**: Actual update frequency may be extended by Android's widget update limits and device battery optimization settings.
+
+**참고**: 실제 업데이트 빈도는 Android의 위젯 업데이트 제한 및 기기 배터리 최적화 설정에 따라 연장될 수 있습니다.
 
 ### Performance Considerations (성능 고려사항)
 
@@ -185,6 +190,9 @@ Potential improvements:
 - [ ] Add loading and error states
 - [ ] Implement deep linking to specific news article
 - [ ] Add animation transitions
+- [ ] Add data encryption for cached news content
+- [ ] Implement secure API communication validation
+- [ ] Add user preferences for news categories
 
 잠재적 개선사항:
 - [ ] 사용자 지정을 위한 위젯 구성 액티비티 추가
@@ -192,6 +200,9 @@ Potential improvements:
 - [ ] 로딩 및 오류 상태 추가
 - [ ] 특정 뉴스 기사로의 딥 링킹 구현
 - [ ] 애니메이션 전환 추가
+- [ ] 캐시된 뉴스 콘텐츠에 대한 데이터 암호화 추가
+- [ ] 보안 API 통신 검증 구현
+- [ ] 뉴스 카테고리에 대한 사용자 기본 설정 추가
 
 ## Testing (테스트)
 
@@ -240,6 +251,10 @@ All builds pass successfully:
 - `app/src/main/res/xml/news_widget_info.xml`
 
 ## References (참조)
+
+**Note**: Documentation URLs are current as of implementation date. Please verify these links are still active.
+
+**참고**: 문서 URL은 구현 날짜 기준입니다. 이러한 링크가 여전히 활성화되어 있는지 확인하십시오.
 
 - [Compose Glance Documentation](https://developer.android.com/jetpack/compose/glance)
 - [App Widgets Overview](https://developer.android.com/develop/ui/views/appwidgets/overview)
