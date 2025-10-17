@@ -11,6 +11,7 @@ import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
+import androidx.glance.action.actionParametersOf
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
@@ -113,7 +114,9 @@ private fun NewsWidgetItem(news: News) {
             .padding(12.dp)
             .cornerRadius(8.dp)
             .clickable(
-                actionStartActivity<MainActivity>()
+                actionRunCallback<OpenNewsUrlAction>(
+                    parameters = actionParametersOf(OpenNewsUrlAction.URL_KEY to news.url)
+                )
             )
     ) {
         Text(
