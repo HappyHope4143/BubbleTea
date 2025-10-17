@@ -32,7 +32,7 @@ This project follows a modern Android architecture with multi-module structure:
 - **Material Design 3**: Latest Material Design system with dynamic theming
 - **Dependency Injection**: Hilt for compile-time safety and performance
 - **Reactive Programming**: StateFlow and Compose state management
-- **Real-time News**: NewsAPI.org integration for IT/Science technology news
+- **Real-time News**: NewsAPI.org integration for technology news
 - **Offline Support**: Room database caching for offline access
 - **Automatic Data Management**: Maintains latest 100 news articles automatically
 

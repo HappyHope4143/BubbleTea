@@ -2,6 +2,9 @@
 ## Copy this file to 'local.properties' and add your actual values.
 
 # Android SDK location
+# Examples:
+# Linux/Mac: sdk.dir=/home/username/Android/Sdk or ~/Android/Sdk
+# Windows: sdk.dir=C:\\Users\\username\\AppData\\Local\\Android\\Sdk
 sdk.dir=/path/to/android/sdk
 
 # NewsAPI.org API Key

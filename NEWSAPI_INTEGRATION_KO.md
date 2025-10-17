@@ -193,7 +193,12 @@ vi local.properties
 
 ```properties
 # local.properties 내용
-sdk.dir=/path/to/android/sdk
+# Android SDK 경로 (예시)
+# Linux/Mac: sdk.dir=/home/username/Android/Sdk 또는 ~/Android/Sdk
+# Windows: sdk.dir=C:\\Users\\username\\AppData\\Local\\Android\\Sdk
+sdk.dir=/usr/local/lib/android/sdk
+
+# NewsAPI 키
 newsapi.apiKey=YOUR_API_KEY_HERE
 ```
 
