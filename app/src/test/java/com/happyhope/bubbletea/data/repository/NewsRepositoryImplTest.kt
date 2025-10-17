@@ -30,6 +30,13 @@ class NewsRepositoryImplTest {
     
     private lateinit var repository: NewsRepositoryImpl
     
+    companion object {
+        private const val TEST_TITLE = "Test News"
+        private const val TEST_SUMMARY = "Test Summary"
+        private const val TEST_URL = "https://test.com"
+        private const val TEST_SOURCE = "Test Source"
+    }
+    
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
@@ -42,20 +49,20 @@ class NewsRepositoryImplTest {
         val entities = listOf(
             NewsEntity(
                 id = 1,
-                title = "Test News",
-                summary = "Test Summary",
-                url = "https://test.com",
-                source = "Test Source",
+                title = TEST_TITLE,
+                summary = TEST_SUMMARY,
+                url = TEST_URL,
+                source = TEST_SOURCE,
                 createdAt = System.currentTimeMillis()
             )
         )
         val expectedNews = listOf(
             News(
                 id = 1,
-                title = "Test News",
-                summary = "Test Summary",
-                url = "https://test.com",
-                source = "Test Source",
+                title = TEST_TITLE,
+                summary = TEST_SUMMARY,
+                url = TEST_URL,
+                source = TEST_SOURCE,
                 createdAt = System.currentTimeMillis()
             )
         )
