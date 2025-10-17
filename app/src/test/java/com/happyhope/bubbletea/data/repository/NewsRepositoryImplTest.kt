@@ -45,6 +45,7 @@ class NewsRepositoryImplTest {
                 title = "Test News",
                 summary = "Test Summary",
                 url = "https://test.com",
+                source = "Test Source",
                 createdAt = System.currentTimeMillis()
             )
         )
@@ -54,6 +55,7 @@ class NewsRepositoryImplTest {
                 title = "Test News",
                 summary = "Test Summary",
                 url = "https://test.com",
+                source = "Test Source",
                 createdAt = System.currentTimeMillis()
             )
         )
