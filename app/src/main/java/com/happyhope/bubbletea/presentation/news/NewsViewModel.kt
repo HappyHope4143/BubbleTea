@@ -1,11 +1,14 @@
 package com.happyhope.bubbletea.presentation.news
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happyhope.bubbletea.domain.model.News
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCase
+import com.happyhope.bubbletea.util.CustomTabsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val getNewsUseCase: GetNewsUseCase,
     private val refreshNewsUseCase: RefreshNewsUseCase
 ) : ViewModel() {
@@ -83,7 +87,7 @@ class NewsViewModel @Inject constructor(
     }
     
     private fun handleNewsClick(news: News) {
-        // TODO: Handle opening news URL in browser or WebView
-        // For now, this is a placeholder for future implementation
+        // Open news URL in Custom Tabs
+        CustomTabsHelper.openUrl(context, news.url)
     }
 }

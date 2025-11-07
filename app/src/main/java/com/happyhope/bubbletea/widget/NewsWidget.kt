@@ -9,8 +9,8 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
+import androidx.glance.action.actionParametersOf
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
@@ -20,7 +20,6 @@ import androidx.glance.layout.*
 import androidx.glance.text.Text
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextStyle
-import com.happyhope.bubbletea.MainActivity
 import com.happyhope.bubbletea.R
 import com.happyhope.bubbletea.domain.model.News
 import java.text.SimpleDateFormat
@@ -113,7 +112,9 @@ private fun NewsWidgetItem(news: News) {
             .padding(12.dp)
             .cornerRadius(8.dp)
             .clickable(
-                actionStartActivity<MainActivity>()
+                actionRunCallback<OpenNewsUrlAction>(
+                    parameters = actionParametersOf(OpenNewsUrlAction.URL_KEY to news.url)
+                )
             )
     ) {
         Text(
