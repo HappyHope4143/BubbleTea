@@ -16,6 +16,9 @@ interface NewsDao {
     @Query("SELECT * FROM news ORDER BY created_at DESC LIMIT :limit")
     suspend fun getNewsWithLimit(limit: Int): List<NewsEntity>
     
+    @Query("SELECT url FROM news")
+    suspend fun getAllUrls(): List<String>
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(newsItems: List<NewsEntity>)
     
@@ -33,4 +36,16 @@ interface NewsDao {
     
     @Query("SELECT * FROM news WHERE url = :url LIMIT 1")
     suspend fun getNewsByUrl(url: String): NewsEntity?
+    
+    /**
+     * Keep only the latest N news items, deleting older ones.
+     * @param limit Maximum number of news items to keep
+     */
+    suspend fun keepLatestOnly(limit: Int) {
+        val currentCount = getNewsCount()
+        if (currentCount > limit) {
+            val excessCount = currentCount - limit
+            deleteOldestNews(excessCount)
+        }
+    }
 }

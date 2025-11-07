@@ -2,9 +2,13 @@ package com.happyhope.bubbletea.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "news")
+@Entity(
+    tableName = "news",
+    indices = [Index(value = ["url"], unique = true)]
+)
 data class NewsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

@@ -1,5 +1,6 @@
 package com.happyhope.bubbletea.presentation.news
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +36,7 @@ class NewsViewModel @Inject constructor(
             is NewsEvent.LoadNews -> loadNews()
             is NewsEvent.RefreshNews -> refreshNews()
             is NewsEvent.RetryLoad -> loadNews()
-            is NewsEvent.NewsClicked -> handleNewsClick(event.news)
+            is NewsEvent.NewsClicked -> handleNewsClick(event.news, event.activityContext)
         }
     }
     
@@ -86,8 +87,9 @@ class NewsViewModel @Inject constructor(
         }
     }
     
-    private fun handleNewsClick(news: News) {
-        // Open news URL in Custom Tabs
-        CustomTabsHelper.openUrl(context, news.url)
+    private fun handleNewsClick(news: News, activityContext: Context?) {
+        // Prefer Activity context when available, fallback to application context
+        val contextToUse = activityContext ?: context
+        CustomTabsHelper.openUrl(contextToUse, news.url)
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ fun NewsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val swipeRefreshState = rememberSwipeRefreshState(uiState.isRefreshing)
+    val context = LocalContext.current
     
     Column(
         modifier = Modifier.fillMaxSize()
@@ -93,7 +95,7 @@ fun NewsScreen(
                             items(uiState.newsList) { news ->
                                 NewsItem(
                                     news = news,
-                                    onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news)) }
+                                    onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news, context)) }
                                 )
                             }
                             
