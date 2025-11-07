@@ -73,13 +73,13 @@ class NewsRepositoryImpl @Inject constructor(
                         val newArticles = newsEntities.distinctBy { it.url }
                             .filter { it.url !in existingUrls }
                         
-                        // Insert new articles (REPLACE strategy handles any edge case conflicts)
+                        // Insert new articles
                         if (newArticles.isNotEmpty()) {
                             newsDao.insertNews(newArticles)
                         }
                         
                         // Keep only the latest N articles
-                        newsDao.keepLatestOnly(BubbleTeaDatabase.NEWS_LIMIT)
+                        clearOldNews()
                         Result.success(Unit)
                     } else {
                         Result.failure(Exception("No valid articles in response"))

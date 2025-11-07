@@ -70,8 +70,13 @@ class NewsWidgetRepository private constructor(context: Context) {
                         newsDao.insertNews(newArticles)
                     }
                     
-                    // Keep only the latest N articles
-                    newsDao.keepLatestOnly(BubbleTeaDatabase.NEWS_LIMIT)
+                    // Keep only the latest N articles using same logic as main repository
+                    val currentCount = newsDao.getNewsCount()
+                    if (currentCount > BubbleTeaDatabase.NEWS_LIMIT) {
+                        val excessCount = currentCount - BubbleTeaDatabase.NEWS_LIMIT
+                        newsDao.deleteOldestNews(excessCount)
+                    }
+                    
                     Result.success(Unit)
                 } else {
                     Result.failure(Exception("No valid articles"))
