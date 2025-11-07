@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".BubbleTeaApplication"
@@ -13,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BubbleTea"
         tools:targetApi="32">
+        
+        <!-- AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7298112669115589~5298316916" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

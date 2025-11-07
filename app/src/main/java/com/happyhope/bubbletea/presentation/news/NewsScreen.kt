@@ -15,8 +15,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.happyhope.bubbletea.domain.model.News
+import com.happyhope.bubbletea.presentation.ads.AdMobBanner
 import java.text.SimpleDateFormat
 import java.util.*
+
+// Banner ad dimensions
+private val BANNER_HEIGHT = 50.dp
+private val BANNER_MARGIN = 16.dp
+// Total padding to prevent overlap with banner ad
+private val BANNER_OVERLAP_PADDING = BANNER_HEIGHT + BANNER_MARGIN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,88 +42,108 @@ fun NewsScreen(
             }
         )
         
-        when {
-            uiState.isLoading && uiState.newsList.isEmpty() -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            
-            uiState.error != null && uiState.newsList.isEmpty() -> {
-                val errorMessage = uiState.error ?: "Unknown error"
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+        // Main content area with weight to push banner to bottom
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            when {
+                uiState.isLoading && uiState.newsList.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = errorMessage,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                        Button(
-                            onClick = { viewModel.handleEvent(NewsEvent.RetryLoad(errorMessage)) }
+                        CircularProgressIndicator()
+                    }
+                }
+                
+                uiState.error != null && uiState.newsList.isEmpty() -> {
+                    val errorMessage = uiState.error ?: "Unknown error"
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("Retry")
+                            Text(
+                                text = errorMessage,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                            Button(
+                                onClick = { viewModel.handleEvent(NewsEvent.RetryLoad(errorMessage)) }
+                            ) {
+                                Text("Retry")
+                            }
                         }
                     }
                 }
-            }
-            
-            else -> {
-                SwipeRefresh(
-                    state = swipeRefreshState,
-                    onRefresh = { viewModel.handleEvent(NewsEvent.RefreshNews) }
-                ) {
-                    LazyColumn(
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                
+                else -> {
+                    SwipeRefresh(
+                        state = swipeRefreshState,
+                        onRefresh = { viewModel.handleEvent(NewsEvent.RefreshNews) }
                     ) {
-                        items(uiState.newsList) { news ->
-                            NewsItem(
-                                news = news,
-                                onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news)) }
-                            )
-                        }
-                        
-                        if (uiState.newsList.isEmpty()) {
-                            item {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = "No news available",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        modifier = Modifier.padding(32.dp)
-                                    )
+                        LazyColumn(
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(uiState.newsList) { news ->
+                                NewsItem(
+                                    news = news,
+                                    onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news)) }
+                                )
+                            }
+                            
+                            if (uiState.newsList.isEmpty()) {
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            text = "No news available",
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            modifier = Modifier.padding(32.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-        
-        uiState.error?.let { error ->
-            if (uiState.newsList.isNotEmpty()) {
-                Snackbar(
-                    modifier = Modifier.padding(16.dp),
-                    action = {
-                        TextButton(onClick = { viewModel.handleEvent(NewsEvent.RetryLoad(error)) }) {
-                            Text("Retry")
+            
+            // Show snackbar overlay for errors when there's content
+            uiState.error?.let { error ->
+                if (uiState.newsList.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = BANNER_OVERLAP_PADDING)
+                    ) {
+                        Snackbar(
+                            modifier = Modifier.padding(16.dp),
+                            action = {
+                                TextButton(onClick = { viewModel.handleEvent(NewsEvent.RetryLoad(error)) }) {
+                                    Text("Retry")
+                                }
+                            }
+                        ) {
+                            Text(error)
                         }
                     }
-                ) {
-                    Text(error)
                 }
             }
         }
+        
+        // AdMob Banner at the bottom
+        AdMobBanner(
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
