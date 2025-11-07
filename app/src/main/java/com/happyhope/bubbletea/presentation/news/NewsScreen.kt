@@ -117,6 +117,7 @@ fun NewsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.BottomCenter)
+                            .padding(bottom = 66.dp) // Add padding to avoid overlapping with banner ad (50dp banner + 16dp margin)
                     ) {
                         Snackbar(
                             modifier = Modifier.padding(16.dp),
