@@ -1,5 +1,6 @@
 package com.happyhope.bubbletea.util
 
+import android.app.Activity
 import android.content.Context
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,6 +12,9 @@ class CustomTabsHelperTest {
 
     @Mock
     private lateinit var mockContext: Context
+    
+    @Mock
+    private lateinit var mockActivity: Activity
 
     @Test
     fun `openUrl handles valid URL gracefully`() {
@@ -58,5 +62,29 @@ class CustomTabsHelperTest {
         CustomTabsHelper.openUrl(mockContext, url, toolbarColor)
         
         // Then - verify it doesn't crash with color parameter
+    }
+    
+    @Test
+    fun `openUrl with Activity context does not throw exception`() {
+        // Given
+        val url = "https://example.com"
+        
+        // When - should not throw exception
+        CustomTabsHelper.openUrl(mockActivity, url)
+        
+        // Then - verify it doesn't crash with Activity context
+        // Activity context should not require FLAG_ACTIVITY_NEW_TASK
+    }
+    
+    @Test
+    fun `openUrl with non-Activity context does not throw exception`() {
+        // Given
+        val url = "https://example.com"
+        
+        // When - should not throw exception
+        CustomTabsHelper.openUrl(mockContext, url)
+        
+        // Then - verify it doesn't crash with non-Activity context
+        // Non-Activity context should add FLAG_ACTIVITY_NEW_TASK
     }
 }
