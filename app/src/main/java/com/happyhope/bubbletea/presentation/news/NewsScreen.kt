@@ -19,8 +19,11 @@ import com.happyhope.bubbletea.presentation.ads.AdMobBanner
 import java.text.SimpleDateFormat
 import java.util.*
 
-// Banner ad height (50dp) + margin (16dp) to prevent overlap with snackbar
-private val BANNER_OVERLAP_PADDING = 66.dp
+// Banner ad dimensions
+private val BANNER_HEIGHT = 50.dp
+private val BANNER_MARGIN = 16.dp
+// Total padding to prevent overlap with banner ad
+private val BANNER_OVERLAP_PADDING = BANNER_HEIGHT + BANNER_MARGIN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

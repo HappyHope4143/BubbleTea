@@ -26,10 +26,10 @@ fun AdMobBanner(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    var isAdLoaded by remember { mutableStateOf(false) }
+    var isAdLoaded by remember(adUnitId) { mutableStateOf(false) }
     
     val adView = remember(adUnitId) {
-        AdView(context).apply {
+        AdView(context.applicationContext).apply {
             setAdSize(AdSize.BANNER)
             this.adUnitId = adUnitId
         }
