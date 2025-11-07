@@ -19,6 +19,9 @@ import com.happyhope.bubbletea.presentation.ads.AdMobBanner
 import java.text.SimpleDateFormat
 import java.util.*
 
+// Banner ad height (50dp) + margin (16dp) to prevent overlap with snackbar
+private val BANNER_OVERLAP_PADDING = 66.dp
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(
@@ -117,7 +120,7 @@ fun NewsScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.BottomCenter)
-                            .padding(bottom = 66.dp) // Add padding to avoid overlapping with banner ad (50dp banner + 16dp margin)
+                            .padding(bottom = BANNER_OVERLAP_PADDING)
                     ) {
                         Snackbar(
                             modifier = Modifier.padding(16.dp),

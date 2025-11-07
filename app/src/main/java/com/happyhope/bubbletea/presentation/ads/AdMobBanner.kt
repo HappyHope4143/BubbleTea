@@ -2,7 +2,11 @@ package com.happyhope.bubbletea.presentation.ads
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -22,10 +26,18 @@ fun AdMobBanner(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val adView = remember {
+    var isAdLoaded by remember { mutableStateOf(false) }
+    
+    val adView = remember(adUnitId) {
         AdView(context).apply {
             setAdSize(AdSize.BANNER)
             this.adUnitId = adUnitId
+        }
+    }
+    
+    DisposableEffect(adView) {
+        onDispose {
+            adView.destroy()
         }
     }
     
@@ -33,7 +45,10 @@ fun AdMobBanner(
         modifier = modifier.fillMaxWidth(),
         factory = { adView },
         update = { view ->
-            view.loadAd(AdRequest.Builder().build())
+            if (!isAdLoaded) {
+                view.loadAd(AdRequest.Builder().build())
+                isAdLoaded = true
+            }
         }
     )
 }
