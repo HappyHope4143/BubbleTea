@@ -2,6 +2,8 @@ package com.happyhope.bubbletea.di
 
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCaseImpl
+import com.happyhope.bubbletea.domain.usecase.LoadMoreNewsUseCase
+import com.happyhope.bubbletea.domain.usecase.LoadMoreNewsUseCaseImpl
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCaseImpl
 import dagger.Binds
@@ -22,4 +24,9 @@ abstract class UseCaseModule {
     abstract fun bindRefreshNewsUseCase(
         impl: RefreshNewsUseCaseImpl
     ): RefreshNewsUseCase
+    
+    @Binds
+    abstract fun bindLoadMoreNewsUseCase(
+        impl: LoadMoreNewsUseCaseImpl
+    ): LoadMoreNewsUseCase
 }

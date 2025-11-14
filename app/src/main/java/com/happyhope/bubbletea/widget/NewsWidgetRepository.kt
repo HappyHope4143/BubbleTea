@@ -50,6 +50,7 @@ class NewsWidgetRepository private constructor(context: Context) {
             val response = newsApiService.getTopHeadlines(
                 category = "technology",
                 country = "us",
+                page = 1,
                 pageSize = 20,
                 apiKey = BuildConfig.NEWS_API_KEY
             )
