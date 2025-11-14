@@ -2,6 +2,14 @@
 
 BubbleTea는 좋아하는 버블티 음료를 주문할 수 있는 Android 애플리케이션입니다.
 
+## 🚀 앱 출시 준비
+
+앱을 Google Play Store에 출시하려면 다음 문서를 참고하세요:
+
+- **[빠른 시작 가이드](QUICK_START_GUIDE_KO.md)** - 당장 시작할 수 있는 것들
+- **[출시 준비 체크리스트](APP_RELEASE_CHECKLIST_KO.md)** - 완전한 출시 준비 가이드
+- **[Release Checklist (English)](APP_RELEASE_CHECKLIST.md)** - Full release preparation guide
+
 ## 프로젝트 구조
 
 이 프로젝트는 다음과 같은 표준 Android 프로젝트 구조로 생성되었습니다:
