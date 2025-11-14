@@ -3,11 +3,14 @@ package com.happyhope.bubbletea.presentation.news
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,6 +35,25 @@ fun NewsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val swipeRefreshState = rememberSwipeRefreshState(uiState.isRefreshing)
+    val context = LocalContext.current
+    val listState = rememberLazyListState()
+    
+    // Detect when user scrolls to bottom for infinite scroll
+    val shouldLoadMore = remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null && 
+            lastVisibleItem.index >= listState.layoutInfo.totalItemsCount - 3 &&
+            uiState.hasMorePages &&
+            !uiState.isLoadingMore
+        }
+    }
+    
+    LaunchedEffect(shouldLoadMore.value) {
+        if (shouldLoadMore.value) {
+            viewModel.handleEvent(NewsEvent.LoadMoreNews)
+        }
+    }
     
     Column(
         modifier = Modifier.fillMaxSize()
@@ -87,14 +109,29 @@ fun NewsScreen(
                         onRefresh = { viewModel.handleEvent(NewsEvent.RefreshNews) }
                     ) {
                         LazyColumn(
+                            state = listState,
                             contentPadding = PaddingValues(16.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             items(uiState.newsList) { news ->
                                 NewsItem(
                                     news = news,
-                                    onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news)) }
+                                    onClick = { viewModel.handleEvent(NewsEvent.NewsClicked(news, context)) }
                                 )
+                            }
+                            
+                            // Loading more indicator
+                            if (uiState.isLoadingMore) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
+                                }
                             }
                             
                             if (uiState.newsList.isEmpty()) {

@@ -1,10 +1,12 @@
 package com.happyhope.bubbletea.presentation.news
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happyhope.bubbletea.domain.model.News
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCase
+import com.happyhope.bubbletea.domain.usecase.LoadMoreNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCase
 import com.happyhope.bubbletea.util.CustomTabsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class NewsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getNewsUseCase: GetNewsUseCase,
-    private val refreshNewsUseCase: RefreshNewsUseCase
+    private val refreshNewsUseCase: RefreshNewsUseCase,
+    private val loadMoreNewsUseCase: LoadMoreNewsUseCase
 ) : ViewModel() {
     
     private val _uiState = MutableStateFlow(NewsUiState())
@@ -34,8 +37,9 @@ class NewsViewModel @Inject constructor(
         when (event) {
             is NewsEvent.LoadNews -> loadNews()
             is NewsEvent.RefreshNews -> refreshNews()
+            is NewsEvent.LoadMoreNews -> loadMoreNews()
             is NewsEvent.RetryLoad -> loadNews()
-            is NewsEvent.NewsClicked -> handleNewsClick(event.news)
+            is NewsEvent.NewsClicked -> handleNewsClick(event.news, event.activityContext)
         }
     }
     
@@ -55,7 +59,8 @@ class NewsViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             newsList = newsList,
-                            error = null
+                            error = null,
+                            currentPage = 1
                         )
                     }
             } catch (e: Exception) {
@@ -69,7 +74,7 @@ class NewsViewModel @Inject constructor(
     
     private fun refreshNews() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            _uiState.value = _uiState.value.copy(isRefreshing = true, currentPage = 1, hasMorePages = true)
             
             val result = refreshNewsUseCase()
             result.fold(
@@ -86,8 +91,39 @@ class NewsViewModel @Inject constructor(
         }
     }
     
-    private fun handleNewsClick(news: News) {
-        // Open news URL in Custom Tabs
-        CustomTabsHelper.openUrl(context, news.url)
+    private fun loadMoreNews() {
+        // Prevent loading more if already loading or no more pages
+        if (_uiState.value.isLoadingMore || !_uiState.value.hasMorePages) {
+            return
+        }
+        
+        viewModelScope.launch {
+            val nextPage = _uiState.value.currentPage + 1
+            _uiState.value = _uiState.value.copy(isLoadingMore = true)
+            
+            val result = loadMoreNewsUseCase(nextPage)
+            result.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(
+                        isLoadingMore = false,
+                        currentPage = nextPage
+                    )
+                },
+                onFailure = { exception ->
+                    // If failed, it might mean no more pages available
+                    _uiState.value = _uiState.value.copy(
+                        isLoadingMore = false,
+                        hasMorePages = false,
+                        error = "Failed to load more: ${exception.message}"
+                    )
+                }
+            )
+        }
+    }
+    
+    private fun handleNewsClick(news: News, activityContext: Context?) {
+        // Prefer Activity context when available, fallback to application context
+        val contextToUse = activityContext ?: context
+        CustomTabsHelper.openUrl(contextToUse, news.url)
     }
 }

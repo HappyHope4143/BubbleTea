@@ -53,10 +53,11 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun refreshNews(): Result<Unit> {
         return withContext(Dispatchers.IO) {
             try {
-                // Try to fetch technology news (IT/Science related)
+                // Fetch latest news (page 1)
                 val response = newsApiService.getTopHeadlines(
                     category = "technology",
                     country = "us",
+                    page = 1,
                     pageSize = 20,
                     apiKey = BuildConfig.NEWS_API_KEY
                 )
@@ -66,7 +67,19 @@ class NewsRepositoryImpl @Inject constructor(
                     val newsEntities = mapper.mapApiListToEntityList(response.articles)
                     
                     if (newsEntities.isNotEmpty()) {
-                        newsDao.insertNews(newsEntities)
+                        // Get existing URLs to avoid unnecessary database operations
+                        val existingUrls = newsDao.getAllUrls().toSet()
+                        
+                        // Filter out duplicates by URL (only insert new articles)
+                        val newArticles = newsEntities.distinctBy { it.url }
+                            .filter { it.url !in existingUrls }
+                        
+                        // Insert new articles
+                        if (newArticles.isNotEmpty()) {
+                            newsDao.insertNews(newArticles)
+                        }
+                        
+                        // Keep only the latest N articles
                         clearOldNews()
                         Result.success(Unit)
                     } else {
@@ -78,6 +91,51 @@ class NewsRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 // Log error and return failure
                 // In production, you might want to use a proper logging framework
+                println("NewsAPI Error: ${e.message}")
+                Result.failure(e)
+            }
+        }
+    }
+    
+    override suspend fun loadMoreNews(page: Int): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Fetch older news (page 2, 3, etc.)
+                val response = newsApiService.getTopHeadlines(
+                    category = "technology",
+                    country = "us",
+                    page = page,
+                    pageSize = 20,
+                    apiKey = BuildConfig.NEWS_API_KEY
+                )
+                
+                // Check if API returned valid data
+                if (response.status == "ok" && response.articles.isNotEmpty()) {
+                    val newsEntities = mapper.mapApiListToEntityList(response.articles)
+                    
+                    if (newsEntities.isNotEmpty()) {
+                        // Get existing URLs to avoid duplicates
+                        val existingUrls = newsDao.getAllUrls().toSet()
+                        
+                        // Filter out duplicates by URL
+                        val newArticles = newsEntities.distinctBy { it.url }
+                            .filter { it.url !in existingUrls }
+                        
+                        // Insert new articles (older articles for pagination)
+                        if (newArticles.isNotEmpty()) {
+                            newsDao.insertNews(newArticles)
+                        }
+                        
+                        // Keep only the latest N articles
+                        clearOldNews()
+                        Result.success(Unit)
+                    } else {
+                        Result.failure(Exception("No valid articles in response"))
+                    }
+                } else {
+                    Result.failure(Exception("API returned error status or empty articles"))
+                }
+            } catch (e: Exception) {
                 println("NewsAPI Error: ${e.message}")
                 Result.failure(e)
             }

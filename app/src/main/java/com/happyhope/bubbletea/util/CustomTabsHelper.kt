@@ -1,5 +1,6 @@
 package com.happyhope.bubbletea.util
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -38,12 +39,21 @@ object CustomTabsHelper {
                 setUrlBarHidingEnabled(false)
             }.build()
             
+            // Add FLAG_ACTIVITY_NEW_TASK if context is not an Activity
+            if (context !is Activity) {
+                customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            
             // Try to launch with Custom Tabs
             try {
                 customTabsIntent.launchUrl(context, uri)
             } catch (e: Exception) {
                 // Fallback to default browser if Custom Tabs not available
-                val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+                val browserIntent = Intent(Intent.ACTION_VIEW, uri).apply {
+                    if (context !is Activity) {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                }
                 if (browserIntent.resolveActivity(context.packageManager) != null) {
                     context.startActivity(browserIntent)
                 }

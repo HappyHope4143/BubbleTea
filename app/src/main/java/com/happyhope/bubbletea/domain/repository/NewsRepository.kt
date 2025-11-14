@@ -9,6 +9,8 @@ interface NewsRepository {
     
     suspend fun refreshNews(): Result<Unit>
     
+    suspend fun loadMoreNews(page: Int): Result<Unit>
+    
     suspend fun getLocalNews(): List<News>
     
     suspend fun clearOldNews()

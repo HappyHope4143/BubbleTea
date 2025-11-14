@@ -16,6 +16,9 @@ interface NewsDao {
     @Query("SELECT * FROM news ORDER BY created_at DESC LIMIT :limit")
     suspend fun getNewsWithLimit(limit: Int): List<NewsEntity>
     
+    @Query("SELECT url FROM news")
+    suspend fun getAllUrls(): List<String>
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNews(newsItems: List<NewsEntity>)
     
