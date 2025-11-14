@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.happyhope.bubbletea.domain.model.News
+import com.happyhope.bubbletea.domain.repository.NewsRepository
 import com.happyhope.bubbletea.domain.usecase.GetNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.LoadMoreNewsUseCase
 import com.happyhope.bubbletea.domain.usecase.RefreshNewsUseCase
@@ -23,7 +24,8 @@ class NewsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getNewsUseCase: GetNewsUseCase,
     private val refreshNewsUseCase: RefreshNewsUseCase,
-    private val loadMoreNewsUseCase: LoadMoreNewsUseCase
+    private val loadMoreNewsUseCase: LoadMoreNewsUseCase,
+    private val newsRepository: NewsRepository
 ) : ViewModel() {
     
     private val _uiState = MutableStateFlow(NewsUiState())
@@ -104,9 +106,12 @@ class NewsViewModel @Inject constructor(
             val result = loadMoreNewsUseCase(nextPage)
             result.fold(
                 onSuccess = {
+                    // Fetch updated news list from database
+                    val updatedNewsList = newsRepository.getLocalNews()
                     _uiState.value = _uiState.value.copy(
                         isLoadingMore = false,
-                        currentPage = nextPage
+                        currentPage = nextPage,
+                        newsList = updatedNewsList
                     )
                 },
                 onFailure = { exception ->
